@@ -1,59 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aargle-Web</title>
-    <style>
-        body { font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 100px; margin: 0; }
-        .logo { font-size: 48px; font-weight: bold; color: #4285F4; margin-bottom: 30px; }
-        .search-box { width: 90%; max-width: 580px; position: relative; }
-        input { 
-            width: 100%; padding: 15px 25px; font-size: 16px; 
-            border: 1px solid #dfe1e5; border-radius: 24px; outline: none;
-            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
-        }
-        .results { width: 90%; max-width: 580px; margin-top: 20px; }
-        .site-card { padding: 15px; border-bottom: 1px solid #eee; }
-        .site-card a { color: #1a0dab; text-decoration: none; font-size: 18px; }
-        .site-url { color: #006621; font-size: 14px; display: block; }
-    </style>
-</head>
-<body>
-
-    <div class="logo">Aargle</div>
-
-    <div class="search-box">
-        <input type="text" id="q" placeholder="アーグルで検索" onkeyup="doSearch()">
-    </div>
-
-    <div id="res" class="results"></div>
-
-    <script>
-        // あかさかさんが手動で更新する「承認済みサイト」リスト
-        const database = [
-            { name: "Google", url: "https://www.google.com", keywords: "google,ぐーぐる,検索" }
-        ];
-
-        function doSearch() {
-            const val = document.getElementById('q').value.toLowerCase();
-            const res = document.getElementById('res');
-            res.innerHTML = '';
-
-            if(!val) return;
-
-            const filtered = database.filter(s => 
-                s.name.toLowerCase().includes(val) || s.keywords.includes(val)
-            );
-
-            filtered.forEach(s => {
-                res.innerHTML += `
-                    <div class="site-card">
-                        <a href="${s.url}" target="_blank">${s.name}</a>
-                        <span class="site-url">${s.url}</span>
-                    </div>`;
-            });
-        }
-    </script>
-</body>
-</html>
+// doSearch関数の中の、filtered.forEachの部分を以下に書き換え
+filtered.forEach(s => {
+    res.innerHTML += `
+        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 10px; background: #fafafa;">
+            <!-- aタグに display: block をつけて、広い範囲をタップ可能にする -->
+            <a href="${s.url}" target="_blank" style="display: block; color: #1a0dab; text-decoration: none; font-size: 20px; font-weight: bold;">
+                ${s.name}
+                <span style="color: #006621; font-size: 14px; display: block; font-weight: normal; margin-top: 5px;">
+                    ${s.url}
+                </span>
+            </a>
+        </div>`;
+});
