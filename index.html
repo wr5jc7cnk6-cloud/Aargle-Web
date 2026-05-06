@@ -1,13 +1,75 @@
-// doSearch関数の中の、filtered.forEachの部分を以下に書き換え
-filtered.forEach(s => {
-    res.innerHTML += `
-        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 10px; background: #fafafa;">
-            <!-- aタグに display: block をつけて、広い範囲をタップ可能にする -->
-            <a href="${s.url}" target="_blank" style="display: block; color: #1a0dab; text-decoration: none; font-size: 20px; font-weight: bold;">
-                ${s.name}
-                <span style="color: #006621; font-size: 14px; display: block; font-weight: normal; margin-top: 5px;">
-                    ${s.url}
-                </span>
-            </a>
-        </div>`;
-});
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aargle-Web</title>
+    <style>
+        /* image.png の見た目を再現 */
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 80px; margin: 0; background: #fff; }
+        .logo { font-size: 60px; font-weight: bold; color: #4285F4; margin-bottom: 30px; letter-spacing: -2px; }
+        
+        .search-container { width: 90%; max-width: 580px; position: relative; }
+        input[type="text"] {
+            width: 100%; padding: 15px 25px; font-size: 18px;
+            border: 1px solid #dfe1e5; border-radius: 30px; /* 画像のような角丸 */
+            outline: none; box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+            box-sizing: border-box;
+        }
+
+        .results { width: 90%; max-width: 580px; margin-top: 30px; }
+        
+        /* 検索結果をタップしやすく */
+        .site-card { 
+            margin-bottom: 15px; padding: 20px; border: 1px solid #eee; 
+            border-radius: 12px; background: #fafafa; transition: 0.2s;
+        }
+        .site-card:active { background: #f0f0f0; } /* タップした時の反応 */
+        
+        .site-card a { display: block; text-decoration: none; }
+        .site-name { color: #1a0dab; font-size: 20px; font-weight: bold; display: block; }
+        .site-url { color: #006621; font-size: 14px; margin-top: 5px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="logo">Aargle</div>
+
+    <div class="search-container">
+        <!-- 入力するたびに検索が実行されます -->
+        <input type="text" id="searchInput" placeholder="アーグルで検索" onkeyup="search()">
+    </div>
+
+    <div id="results" class="results"></div>
+
+    <script>
+        // あかさかさんが承認したデータベース
+        const approvedSites = [
+            { name: "Google", url: "https://www.google.com", keywords: "google,ぐーぐる,検索" }
+        ];
+
+        function search() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            if (query === '') return;
+
+            const filtered = approvedSites.filter(site => 
+                site.name.toLowerCase().includes(query) || 
+                site.keywords.includes(query)
+            );
+
+            filtered.forEach(site => {
+                resultsContainer.innerHTML += `
+                    <div class="site-card">
+                        <a href="${site.url}" target="_blank">
+                            <span class="site-name">${site.name}</span>
+                            <span class="site-url">${site.url}</span>
+                        </a>
+                    </div>`;
+            });
+        }
+    </script>
+</body>
+</html>
